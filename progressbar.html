@@ -1,0 +1,36 @@
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+<p id="balance"></p>
+//Edit lines 4,5 to change look of progressbar
+<div id="progressbar" style="border: 1px solid black; width: 500px; height: 20px; border-radius: 4px">
+<div style="height: 100%; background: red; width: 0%; max-width: 100%; transition: width 2s ;"></div>
+</div>
+</div>
+<script>
+    jQuery( document ).ready(function() {
+        const fetchData = () => {
+        jQuery.ajax({
+        type: 'GET',
+        url: "https://chainquery.lbry.io/api/addresssummary?address=bYtzDrxvBfv1bZUbkJqV2CH4534Sdax6Du", //change address= to your LBC address , also is recomended to use own chainquery
+        success: function (data) {
+            const zbiorka = 100; // Input here how many LBC you need to reach goal
+            const parent = $('#progressbar'); // parent
+            const child = parent.children(); // child (progressbar)
+            const parentWidth = parent.width(); // 100%
+            const percent = ((data.data.Balance / zbiorka) * 100);
+            const wixelWidth = (parentWidth / 100) * percent;
+            
+            const childWidth = child.width(wixelWidth);
+
+            $('#balance').text(`GOAL ${data.data.Balance}/${zbiorka}`) //this display amount of LBC you have and after that total amount of your goal
+        },
+    });
+    }
+
+    fetchData();
+    setInterval(() => {
+        fetchData();
+    }, 120E3)
+});
+
+
+</script>
